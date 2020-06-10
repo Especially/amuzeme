@@ -2,15 +2,16 @@ const express = require('express');
 const router = express.Router();
 const { Storage } = require('@google-cloud/storage');
 const storage = new Storage({ keyFilename: './data/cloudaccesskey.json' });
+const imageDataURI = require('image-data-uri');
+const fs = require('fs');
+const { uuid } = require('uuidv4');
 const axios = require('axios');
+
+// Vars
 const bucketName = 'amuzeme';
+const storageURL = 'https://storage.cloud.google.com/amuzeme';
 
-
-//https://github.com/googleapis/nodejs-storage/blob/master/samples/deleteFile.js
-
-// Make Public
-// Make Private
-// Delete
+// Upload to cloud promise
 const cloudUpload = (localFile) => {
     return new Promise((resolve, reject) => {
         resolve(storage.bucket(bucketName).upload(localFile, {
@@ -22,16 +23,22 @@ const cloudUpload = (localFile) => {
         );
     })
 };
+
+// Make public on cloud promise
 const cloudPublic = (fileName) => {
     return new Promise((resolve, reject) => {
         resolve(storage.bucket(bucketName).file(fileName).makePublic());
     })
 };
+
+// Make private on cloud promise
 const cloudPrivate = (fileName) => {
     return new Promise((resolve, reject) => {
         resolve(storage.bucket(bucketName).file(fileName).makePrivate());
     })
 };
+
+// Make delete from cloud promise
 const cloudDelete = (fileName) => {
     return new Promise((resolve, reject) => {
         resolve(storage.bucket(bucketName).file(fileName).delete());
@@ -39,19 +46,32 @@ const cloudDelete = (fileName) => {
 };
 
 
-router.get('/:file', (req, res) => {
-    let fileName = req.params.file;
-    let filePath = `temp/${req.params.file}`;
-    cloudUpload(filePath)
-        .then(result => {
-            console.log(result);
-            res.send(result);
-        })
-        .catch(err => {
-            console.log(err);
-            res.send(err);
-        })
-    console.log(fileName)
+router.post('/generate', (req, res) => {
+    const imageURI = req.body.uri;
+    const imageName = uuid();
+    const imagePath = `./temp/${imageName}.png`;
+    if (imageURI) {
+        imageDataURI.outputFile(imageURI, imagePath)
+            // Temporary file created
+            .then(result => {
+                // Upload to the cloud
+                return cloudUpload(result);
+
+            }).then(() => {
+                // Image successfully uploaded, remove from local temp store
+                fs.unlinkSync(imagePath)
+                // Make image public on server
+                return cloudPublic(`${imageName}.png`);
+            })
+            .catch(err => {
+                res.status(400).json({ 'success': false, 'message': err })
+            })
+        // Return cloud URL to client and handle from there
+        res.status(201).json({ success: true, image: `${storageURL}/${imageName}.png` });
+    } else {
+        res.status(400).json({ 'success': false, 'message': 'No data URI has been provided' })
+    }
+
 });
 
 module.exports = router;
