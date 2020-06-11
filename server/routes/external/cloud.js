@@ -9,7 +9,7 @@ const axios = require('axios');
 
 // Vars
 const bucketName = 'amuzeme';
-const storageURL = 'https://storage.cloud.google.com/amuzeme';
+const storageURL = `https://storage.cloud.google.com/${bucketName}`;
 
 // Upload to cloud promise
 const cloudUpload = (localFile) => {
@@ -45,7 +45,7 @@ const cloudDelete = (fileName) => {
     })
 };
 
-
+// { "uri": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="}
 router.post('/generate', (req, res) => {
     const imageURI = req.body.uri;
     const imageName = uuid();
@@ -67,11 +67,26 @@ router.post('/generate', (req, res) => {
                 res.status(400).json({ 'success': false, 'message': err })
             })
         // Return cloud URL to client and handle from there
-        res.status(201).json({ success: true, image: `${storageURL}/${imageName}.png` });
+        res.status(201).json({ success: true, image: `${storageURL}/${imageName}.png`, id: imageName});
     } else {
         res.status(400).json({ 'success': false, 'message': 'No data URI has been provided' })
     }
 
+});
+
+router.delete('/purge/:image', (req, res) => {
+    const imageID = req.params.image;
+    if (imageID) {
+        cloudDelete(imageID)
+            .then(() => {
+                res.status(204).json({'success': true, 'message': `Resource (${imageID}) removed from the cloud.`})
+            })
+            .catch( err => {
+                res.status(400).json({'success': false, 'message': `${err}`})
+            });
+    } else {
+        res.status(400).json({'success': false, 'message': `Resource not provided`})
+    }
 });
 
 module.exports = router;
