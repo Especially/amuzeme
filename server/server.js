@@ -6,16 +6,14 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
+// Middleware
+app.use(express.json());
+app.use(cors());
+
 // Routes
 const faceAiRoute = require('./routes/external/faceAi');
 const cloudRoute  = require('./routes/external/cloud');
-
-// Port
-
-
-// Middleware
-app.use(cors());
-app.use(express.json());
+const spotifyRoute  = require('./routes/external/spotify');
 
 // External Routes
     //Face AI Route
@@ -23,6 +21,9 @@ app.use(express.json());
 
     //Cloud Route
     app.use('/cloud', cloudRoute);
+
+    //Spotify Route
+    app.use('/spotify', spotifyRoute);
 
 
 
