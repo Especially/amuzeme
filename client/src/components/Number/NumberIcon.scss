@@ -1,0 +1,18 @@
+@import '../../partials/mixins', '../../partials/variables';
+
+.numberIcon {
+    @include flex-center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background-color: $primary-bg;
+    border-radius: 50px;
+    box-shadow: $shadow;
+    @include tablet {
+        margin-right: 32px;
+    }
+    &__text {
+        user-select: none;
+        font-weight: 500;
+    }
+}
