@@ -1,0 +1,89 @@
+@import "../../partials/mixins", "../../partials/variables";
+
+.hero {
+    @include margins;
+    height: 493px;
+    background: url("../../assets/hero.png") no-repeat center;
+    background-size: cover;
+    @include flex-center;
+    &__content {
+        width: 400px;
+    }
+    &__text {
+        margin: 2rem 0;
+        text-shadow: 0px 4px 4px $primary;
+    }
+}
+
+.content {
+    @include flex-column;
+    padding-top: 0!important;
+    @include margins;
+    &__title {
+        text-align: center;
+    }
+    &__heading {
+        @include flex-column;
+        align-items: center;
+        margin: 16px 0;
+        border-bottom: $border;
+        @include tablet {
+            flex-direction: row;
+            align-items: unset;
+            margin: 0;
+            border: none;
+        }
+    }
+
+    &__dialogue {
+        margin: 16px 0;
+        @include flex-column;
+        &:nth-child(odd) {
+            & .content__heading {
+                @include tablet{
+                    justify-content: space-between;
+                }
+            }
+            &__info {
+                margin-left: 0;
+            }
+            & .content__img {
+                width: 264px;
+                height: 155px;
+            }
+        }
+    }
+
+    &__sub-title {
+        font-weight: 600;
+        line-height: 1.5;
+    }
+    &__holder {
+        @include flex-column;
+        @include tablet {
+            flex-direction: row;
+            margin-left: 78px;
+        }
+    }
+    &__text {
+        margin: 16px 0;
+    }
+    &__visual {
+        margin: 0 32px;
+        @include flex-column;
+        align-items: center;
+    }
+    &__img {
+        margin: 16px 0;
+        width: 345px;
+        height: 250px;
+        border-radius: 10px;
+        box-shadow: $shadow;
+        width: 255px;
+        height: 180px;
+        @include tablet {
+            width: 345px;
+            height: 250px;
+        }
+    }
+}

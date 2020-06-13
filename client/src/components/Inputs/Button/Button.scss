@@ -1,0 +1,31 @@
+@import '../../../partials/mixins', '../../../partials/variables';
+
+.btn {
+    background-color: $primary-bg;
+    width: 136px;
+    height: 40px;
+    color: $secondary;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    border-radius: 50px;
+    padding: 0 16px;
+    box-shadow: $shadow;
+    transition: $transition;
+
+    @include tablet {
+
+    }
+    &:hover {
+        background-color: $primary-bg-hov;
+    }
+
+    &-spotify {
+        font-weight: 600;
+        background-color: $spotify-grn;
+        width: auto;
+        &:hover {
+            background-color: $spotify-hvr;
+        }
+    }
+}
