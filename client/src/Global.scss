@@ -1,0 +1,71 @@
+@import "./partials/fonts", "./partials/mixins", "./partials/variables";
+
+*,
+html {
+    margin: 0px;
+    padding: 0px;
+    font-family: "Raleway";
+    color: $secondary;
+    box-sizing: border-box;
+    font-size: 14px;
+    border: none;
+    @include tablet {
+        font-size: 16px;
+    }
+
+    &:active,
+    &:focus {
+        border: none;
+        outline: none;
+    }
+}
+
+body {
+    background-color: $primary;
+}
+
+.text-xxl {
+    font-size: 2.571rem; // 36px
+    @include tablet {
+        font-size: 2.5rem; // 40px
+    }
+}
+
+.text-xl {
+    font-size: 2.286rem; // 32px
+    @include tablet {
+        font-size: 2rem; // 32 px
+    }
+}
+
+.text-lg {
+    font-size: 1.714rem; // 24px
+    @include tablet {
+        font-size: 1.5rem; // 24px
+    }
+}
+
+.text-m {
+    font-size: 1.143rem; // 16px
+    @include tablet {
+        font-size: 1.125rem; //18px
+    }
+}
+
+.text-r {
+    font-size: 1rem; // 14px
+    @include tablet {
+        font-size: 1rem; //16px
+    }
+}
+
+.text-s {
+    font-size: 0.929rem; // 13px
+    @include tablet {
+        font-size: 0.875rem; //14px
+    }
+}
+
+.text-grn {
+    color: $spotify-grn;
+}

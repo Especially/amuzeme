@@ -1,1 +1,69 @@
 @import '../../partials/mixins', '../../partials/variables';
+
+.head {
+    position: fixed;
+    width: 100%;
+    @include mobile {
+        padding: 0 16px;
+      }
+      @include tablet {
+        padding: 0 24px;
+      }
+      @include desktop {
+        padding: 0 60px;
+      }
+    &__nav {
+        display: flex;
+        justify-content: space-between;
+        &-logo {
+            display: flex;
+        }
+        &-links {
+
+        }
+    }
+
+    &__logo {
+        background:  url('../../assets/logo.svg') no-repeat center;
+        background-size: cover;
+        width: 48px;
+        height: 48px;
+        &-text {
+            @include flex-center;
+            padding: 0 8px;
+            background-color: $primary-bg;
+            border-radius: 0 0 10px 10px;
+            box-shadow: $shadow;
+            height: 32px;
+            &--inner {
+                user-select: none;
+            }
+        }
+    }
+}
+
+.nav {
+    &-menu {
+        display: flex;
+        list-style: none;
+        height: 100%;
+        border-radius: 0 0 10px 10px;
+        overflow: hidden;
+        box-shadow: $shadow;
+        user-select: none;
+        &__links {
+            padding: 0px 8px;
+            background-color: $primary-bg;
+            @include flex-center;
+            transition: $transition;
+            &:hover {
+                background-color: $primary-bg-hov;
+            }
+        }
+    }
+    &-link {
+        text-decoration: none;
+        display: flex;
+    }
+
+}
