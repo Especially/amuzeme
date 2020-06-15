@@ -19,16 +19,16 @@ function Header({ loggedIn, userName }) {
             <Link to="/">
               <div className='head__logo'></div>
             </Link>
-            <div className='head__logo-text'><span className="head__logo-text--inner">AmuzeMe</span></div>
+            <div className='head__logo-text'><span className="head__logo-text--inner text-s">AmuzeMe</span></div>
           </div>
           <div className='head__nav-links'>
             <ul className='nav-menu'>
-              <Link to="/app" className="nav-link"><li className='nav-menu__links'>The App</li></Link>
-              <Link to="/privacy" className="nav-link"><li className='nav-menu__links'>Privacy</li></Link>
+              <Link to="/moody" className="nav-link"><li className='nav-menu__links text-s'>Get Moody</li></Link>
+              <Link to="/privacy" className="nav-link"><li className='nav-menu__links text-s'>Privacy</li></Link>
               {(signedIn) ?
-                <li className='nav-menu__links'>{user}</li>
+                <li className='nav-menu__links text-s'>{user}</li>
                 :
-                <a href="http://localhost:8080/spotify/login" className="nav-link"><li className='nav-menu__links'>Sign In</li></a>
+                <a href="http://localhost:8080/spotify/login" className="nav-link"><li className='nav-menu__links text-s'>Sign In</li></a>
               }
             </ul>
           </div>

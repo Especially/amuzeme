@@ -21,6 +21,7 @@
     @include margins;
     &__title {
         text-align: center;
+        margin: 1rem 0;
     }
     &__heading {
         @include flex-column;
