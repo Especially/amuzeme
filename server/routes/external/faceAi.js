@@ -16,11 +16,12 @@ const options = {
         'Content-Type': 'application/json',
         'Ocp-Apim-Subscription-Key': API_KEY
     }
+
 };
 
 router.post('/', (req, res) => {
-    axios.post(`${API_URL}/face/v1.0/detect`, req.body, options).then(response => {
-        console.log(response.data);
+    axios.post(API_URL, req.body, options)
+    .then(response => {
         res.status(201).json(response.data);
     }).catch(err => {
         res.status(400).json({
