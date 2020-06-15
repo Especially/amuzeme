@@ -37,6 +37,7 @@
             height: 32px;
             &--inner {
                 user-select: none;
+                font-weight: 600;
             }
         }
     }
@@ -54,6 +55,7 @@
         &__links {
             padding: 0px 8px;
             background-color: $primary-bg;
+            font-weight: 500;
             @include flex-center;
             transition: $transition;
             &:hover {

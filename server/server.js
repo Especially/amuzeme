@@ -7,7 +7,8 @@ const app = express();
 const cors = require('cors');
 
 // Middleware
-app.use(express.json());
+// Setting max limit as opposed default 100kb limit to process data URIs
+app.use(express.json({ limit: '10MB' }));
 app.use(cors());
 
 // Routes

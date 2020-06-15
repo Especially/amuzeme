@@ -4,6 +4,7 @@ import axios from 'axios';
 import './Global.scss';
 import Header from './components/Header/Header';
 import Main from './pages/Main/Main';
+import Moody from './pages/Moody/Moody';
 
 const auth_url = `http://localhost:8080/spotify`;
 
@@ -73,7 +74,7 @@ function App() {
       <Header userName={userName} loggedIn={loggedIn} />
         <Switch>
           <Route path="/" exact render={() =>  <Main userName={userName} loggedIn={loggedIn}/> }   />
-
+          <Route path="/moody" render={() =>  <Moody userName={userName} loggedIn={loggedIn} access={accessToken} refresh={refreshToken}/> } />
         </Switch>
 
       </BrowserRouter>

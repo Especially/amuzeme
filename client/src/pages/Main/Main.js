@@ -23,7 +23,7 @@ function Main({loggedIn, userName}) {
                 {(signedIn) ?
                     <div className="hero__content">
                         <h1 className="hero__text text-xl">Welcome back, {user}! Are you ready to get moody?</h1>
-                        <Link to="/app">
+                        <Link to="/moody">
                             <Button title='Get Moody' btnClass='btn-primary' />
                         </Link>
                     </div> :
@@ -65,7 +65,7 @@ function Main({loggedIn, userName}) {
                     <div className="content__holder">
                         <div className="content__visual">
                             <img className="content__img" alt="Facial analyzing" src={facial_ai} />
-                            <Link to="/app">
+                            <Link to="/moody">
                                 <Button title='Analyze' btnClass='btn-primary' />
                             </Link>
                         </div>

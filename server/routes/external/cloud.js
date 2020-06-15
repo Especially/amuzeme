@@ -9,7 +9,7 @@ const axios = require('axios');
 
 // Vars
 const bucketName = 'amuzeme';
-const storageURL = `https://storage.cloud.google.com/${bucketName}`;
+const storageURL = `https://storage.googleapis.com/${bucketName}`;
 
 // Upload to cloud promise
 const cloudUpload = (localFile) => {
@@ -49,7 +49,7 @@ const cloudDelete = (fileName) => {
 router.post('/generate', (req, res) => {
     const imageURI = req.body.uri;
     const imageName = uuid();
-    const imagePath = `./temp/${imageName}.png`;
+    const imagePath = `./temp/${imageName}.jpg`;
     if (imageURI) {
         imageDataURI.outputFile(imageURI, imagePath)
             // Temporary file created
@@ -61,13 +61,13 @@ router.post('/generate', (req, res) => {
                 // Image successfully uploaded, remove from local temp store
                 fs.unlinkSync(imagePath)
                 // Make image public on server
-                return cloudPublic(`${imageName}.png`);
+                return cloudPublic(`${imageName}.jpg`);
             })
             .catch(err => {
                 res.status(400).json({ 'success': false, 'message': err })
             })
         // Return cloud URL to client and handle from there
-        res.status(201).json({ success: true, image: `${storageURL}/${imageName}.png`, id: imageName});
+        res.status(201).json({ success: true, image: `${storageURL}/${imageName}.jpg`, id: imageName});
     } else {
         res.status(400).json({ 'success': false, 'message': 'No data URI has been provided' })
     }
@@ -75,7 +75,7 @@ router.post('/generate', (req, res) => {
 });
 
 router.delete('/purge/:image', (req, res) => {
-    const imageID = req.params.image;
+    const imageID = `${req.params.image}.jpg`;
     if (imageID) {
         cloudDelete(imageID)
             .then(() => {
