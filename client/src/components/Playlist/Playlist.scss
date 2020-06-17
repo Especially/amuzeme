@@ -1,0 +1,87 @@
+@import "../../partials/mixins", "../../partials/variables";
+.playlist {
+    display: flex;
+    width: 100%;
+}
+
+.spotify-playlist {
+    @include flex-column;
+    align-self: center;
+    box-shadow: $shadow-alt;
+    background-color: #1b1b1b;
+    border-radius: 10px;
+    padding: 8px;
+    overflow: hidden;
+
+    @include tablet {
+        width: 80%;
+    }
+    &__logo {
+        width: 32px;
+        height: 32px;
+        background: url("../../assets/spotify_logo.svg") no-repeat center;
+        background-size: cover;
+        margin: 0px 16px 0px 0px;
+    }
+    &__save {
+        align-self: flex-end;
+        width: 35px;
+        height: 38px;
+        background-size: cover;
+        margin: 0px 16px 0px 0px;
+        &-icon {
+            fill: #4f4f4f;
+            stroke: #4f4f4f;
+            stroke-width: 5px;
+            cursor: pointer;
+            transition: $transition;
+            &:hover {
+                opacity: 0.5;
+                fill: $primary-bg;
+                stroke: $primary-bg
+            }
+            &.saved {
+                opacity: 1;
+                fill: $primary-bg;
+                stroke: $primary-bg
+            }
+        }
+    }
+    &__title {
+        display: flex;
+    }
+    &__container {
+        @include flex-column;
+        padding: 8px;
+        border-radius: 10px;
+        background-color: #515151;
+    }
+    &__header {
+        display: flex;
+        padding: 8px;
+        height: 48px;
+        align-items: center;
+        justify-content: space-between;
+    }
+}
+
+.container {
+    &__header {
+        display: flex;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    &__row {
+        display: flex;
+        &:hover {
+            background-color: #1b1b1b;
+        }
+    }
+    &__cell {
+        flex-basis: 170px;
+        margin: 8px;
+        &:first-child,
+        &:last-child {
+            flex-basis: 80px;
+        }
+    }
+}

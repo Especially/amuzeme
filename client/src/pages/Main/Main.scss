@@ -19,6 +19,7 @@
     @include flex-column;
     padding-top: 0!important;
     @include margins;
+    width: 100%;
     &__title {
         text-align: center;
         margin: 1rem 0;
