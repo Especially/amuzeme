@@ -28,7 +28,7 @@ function Header({ loggedIn, userName }) {
               {(signedIn) ?
                 <li className='nav-menu__links text-s'>{user}</li>
                 :
-                <a href="http://localhost:8080/spotify/login" className="nav-link"><li className='nav-menu__links text-s'>Sign In</li></a>
+                <a href="/spotify/login" className="nav-link"><li className='nav-menu__links text-s'>Sign In</li></a>
               }
             </ul>
           </div>
