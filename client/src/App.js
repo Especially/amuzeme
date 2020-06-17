@@ -28,7 +28,7 @@ function App() {
 
   function getUserData(access) {
     axios
-      .get(`${auth_url}/profile/${access}`)
+      .get(`/spotify/profile/${access}`)
       .then(res => {
         let userName = res.data.display_name.split(' ').splice(0, 1).join();
         setUserName(userName);
@@ -41,7 +41,7 @@ function App() {
 
   function verifyToken(refresh) {
     axios
-      .get(`${auth_url}/refresh_token/?refresh_token=${refresh}`)
+      .get(`/spotify/refresh_token/?refresh_token=${refresh}`)
       .then(res => {
         const access_token = res.data.access_token;
         setAccessToken(access_token);
