@@ -165,7 +165,7 @@ router.get('/playlist/:mood', (req, res) => {
   const access_token = req.headers.access_token;
   const mood = req.params.mood;
   const artists = JSON.parse(req.headers.artists);
-  const artistsSeed = (artists) ? {'seed_artists': artists.join(',')} : null;
+  let artistsSeed = (artists) ? {'seed_artists': artists.join(',')} : null;
   let parameters, moodParams, moodSeed;
   
   switch (mood) {
@@ -202,8 +202,13 @@ router.get('/playlist/:mood', (req, res) => {
       moodSeed = {'seed_genres':'pop,k-pop,r-n-b,latino'};
       break;
   }
-
-  parameters = (artists) ? {...artistsSeed, ...moodParams} : {...moodSeed, ...moodParams};
+  // Need more seed info to prevent lack of results due to user's low listening history
+  if (artists.length < 5 && artists.length > 0) {
+    const end = 5 - artists.length;
+    let slicedGenres = moodSeed.seed_genres.split(',').slice(0,end).join(',');
+    artistsSeed = {'seed_genres': slicedGenres, ...artistsSeed};
+  }
+  parameters = (artists.length > 0) ? {...artistsSeed, ...moodParams} : {...moodSeed, ...moodParams};
   console.log(parameters);
   axios
     .get(`${API_URL}/recommendations`, {
