@@ -123,7 +123,7 @@ router.get('/refresh_token', function (req, res) {
       });
       // Remove else if pain points still exist
     } else {
-      res.status(400).json({success: false, 'message':`Invalid refresh token`})
+      res.status(400).json({ success: false, 'message': `Invalid refresh token` })
     }
   });
 });
@@ -135,11 +135,88 @@ router.get('/profile/:access_token', (req, res) => {
       headers: { 'Authorization': 'Bearer ' + access_token },
       json: true
     })
-    .then( result => {
+    .then(result => {
       res.status(200).json(result.data);
     })
     .catch(err => {
-      res.status(400).json({success: false, "message": `There was an error retreiving User Data`})
+      res.status(400).json({ success: false, "message": `There was an error retreiving User Data` })
+    })
+
+});
+
+router.get('/recent/:access_token', (req, res) => {
+  const access_token = req.params.access_token;
+  axios
+    .get(`${API_URL}/me/player/recently-played`, {
+      params: { 'limit': 50 },
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+    })
+    .then(result => {
+      res.status(200).json(result.data);
+    })
+    .catch(err => {
+      res.status(400).json({ success: false, "message": `There was an error retreiving User Data` })
+    })
+
+});
+
+router.get('/playlist/:mood', (req, res) => {
+  const access_token = req.headers.access_token;
+  const mood = req.params.mood;
+  const artists = JSON.parse(req.headers.artists);
+  const artistsSeed = (artists) ? {'seed_artists': artists.join(',')} : null;
+  let parameters, moodParams, moodSeed;
+  
+  switch (mood) {
+    case 'anger':
+      moodParams = {'max_valence': '0.4', 'min_energy':'0.7', 'target_tempo':'0.8'};
+      moodSeed = {'seed_genres':'metal,electro,hard-rock,heavy-metal,metalcore'};
+      break;
+    case 'contempt':
+      moodParams = {'target_valence': '0.5', 'target_energy':'0.5', 'target_tempo':'0.4', 'target_danceability':'0.5'};
+      moodSeed = {'seed_genres':'classical,folk,sleep,study,ambient'};
+      break;
+    case 'disgust':
+      moodParams = {'target_valence': '0.4', 'min_energy':'0.7', 'target_tempo':'0.5', 'target_danceability':'0.5'};
+      moodSeed = {'seed_genres':'grunge,electro,progressive-house,deep-house'};
+      break;
+    case 'fear':
+      moodParams = {'max_valence': '0.5', 'target_energy':'1.0', 'min_tempo':'0.7', 'target_danceability':'1.0'};
+      moodSeed = {'seed_genres':'punk-rock,metal,trance,deep-house,goth'};
+      break;
+    case 'happiness':
+      moodParams = {'target_valence': '1.0', 'min_energy':'0.7', 'min_tempo':'0.7', 'target_danceability':'1.0'};
+      moodSeed = {'seed_genres':'happy,pop,edm,dance,party'};
+      break;
+    case 'neutral':
+      moodParams = {'max_valence': '0.4', 'target_energy':'0.5', 'target_tempo':'0.5', 'target_danceability':'0.4'};
+      moodSeed = {'seed_genres':'indie,synth-pop,chill,pop,r-n-b'};
+      break;
+    case 'sadness':
+      moodParams = {'max_valence': '0.3', 'target_energy':'0.5', 'target_tempo':'0.4', 'target_danceability':'0.5'};
+      moodSeed = {'seed_genres':'sad,indie,progressive-house,r-n-b'};
+      break;
+    case 'surprise':
+      moodParams = {'min_valence': '0.6', 'target_energy':'0.6', 'target_tempo':'0.4', 'target_danceability':'0.6'};
+      moodSeed = {'seed_genres':'pop,k-pop,r-n-b,latino'};
+      break;
+  }
+
+  parameters = (artists) ? {...artistsSeed, ...moodParams} : {...moodSeed, ...moodParams};
+  console.log(parameters);
+  axios
+    .get(`${API_URL}/recommendations`, {
+      params: parameters,
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+    })
+    .then(result => {
+      res.status(200).json(result.data);
+    })
+    .catch(err => {
+      console.log(err.data);
+      res.status(400).json({ success: false, "message": `There was an error retreiving User Data: ${err}` })
     })
 
 });

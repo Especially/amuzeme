@@ -29,7 +29,7 @@ function Main({loggedIn, userName}) {
                     </div> :
                     <div className="hero__content">
                         <h1 className="hero__text text-xl">Let your mood pick your playlist for you.</h1>
-                        <a href="http://localhost:8080/spotify/login">
+                        <a href="/spotify/login">
                             <Button title='Check It Out' btnClass='btn-primary' />
                         </a>
                     </div>
@@ -51,7 +51,7 @@ function Main({loggedIn, userName}) {
                         </div>
                         <div className="content__visual">
                             <img className="content__img" alt="Taking a selfie" src={selfie_one} />
-                            <a href="http://localhost:8080/spotify/login">
+                            <a href="/spotify/login">
                                 <Button title='Connect with Spotify' btnClass='btn-spotify' />
                             </a>
                         </div>

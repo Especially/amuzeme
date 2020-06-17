@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Selfies.scss';
 import Button from '../../components/Inputs/Button/Button';
-import NumberIcon from '../../components/Number/Number';
 import Selfie from '../../components/Selfie/Selfie';
 
-function Selfies({ images, removeImg }) {
+function Selfies({ images, removeImg, clickHandler }) {
     const [selfies, setSelfies] = useState([]);
 
     useEffect(() => {
@@ -19,7 +18,7 @@ function Selfies({ images, removeImg }) {
                 <div className="gallery__holder">
                 {(selfies.length > 0) ? selfies.map((item, i) => <Selfie key={i} image={item.uri} id={item.id} clickHandler={removeImg} />) : null}
                 </div>
-                {(selfies.length === 3) ? <Button title='Analyze' btnClass='btn-primary' /> : null}
+                {(selfies.length === 3) ? <Button title='Analyze' btnClass='btn-primary' clickHandler={clickHandler} /> :  null }
             </section>
         </>
     );
