@@ -79,6 +79,7 @@
     &__cell {
         flex-basis: 170px;
         margin: 8px;
+        text-shadow: 1px 1px #1b1b1b;
         &:first-child,
         &:last-child {
             flex-basis: 80px;
