@@ -1,0 +1,36 @@
+@import "../../../partials/mixins", "../../../partials/variables";
+
+.playlistMenu {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    &__holder {
+        list-style: none;
+        position: absolute;
+        right: 16px;
+        background-color: #f4f4f4;
+        padding: 4px 16px;
+        border-radius: 5px;
+        display: flex;
+        color: black;
+        &.false {
+            display: none
+        }
+        &.true {
+            display: block;
+        }
+    }
+    &__item {
+        padding: 8px;
+        background-color: #f2f2f2;
+        color: black;
+        text-shadow: none;
+        font-weight: 600;
+        transition: $transition;
+        cursor: pointer;
+        &:hover {
+            background-color: $primary-lt;
+            color: $secondary;
+        }
+    }
+}

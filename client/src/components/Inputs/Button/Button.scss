@@ -19,6 +19,9 @@
     &:hover {
         background-color: $primary-bg-hov;
     }
+    &:disabled {
+        background-color: $primary;
+    }
 
     &-spotify {
         font-weight: 600;

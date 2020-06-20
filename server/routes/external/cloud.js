@@ -45,7 +45,6 @@ const cloudDelete = (fileName) => {
     })
 };
 
-// { "uri": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg=="}
 router.post('/generate', (req, res) => {
     const imageURI = req.body.uri;
     const imageName = uuid();
@@ -62,12 +61,16 @@ router.post('/generate', (req, res) => {
                 fs.unlinkSync(imagePath)
                 // Make image public on server
                 return cloudPublic(`${imageName}.jpg`);
-            })
+            },
+                err => {
+                    res.status(400).json({ 'success': false, 'message': err })
+                }
+            )
             .catch(err => {
                 res.status(400).json({ 'success': false, 'message': err })
             })
         // Return cloud URL to client and handle from there
-        res.status(201).json({ success: true, image: `${storageURL}/${imageName}.jpg`, id: imageName});
+        res.status(201).json({ success: true, image: `${storageURL}/${imageName}.jpg`, id: imageName });
     } else {
         res.status(400).json({ 'success': false, 'message': 'No data URI has been provided' })
     }
@@ -79,13 +82,13 @@ router.delete('/purge/:image', (req, res) => {
     if (imageID) {
         cloudDelete(imageID)
             .then(() => {
-                res.status(204).json({'success': true, 'message': `Resource (${imageID}) removed from the cloud.`})
+                res.status(204).json({ 'success': true, 'message': `Resource (${imageID}) removed from the cloud.` })
             })
-            .catch( err => {
-                res.status(400).json({'success': false, 'message': `${err}`})
+            .catch(err => {
+                res.status(400).json({ 'success': false, 'message': `${err}` })
             });
     } else {
-        res.status(400).json({'success': false, 'message': `Resource not provided`})
+        res.status(400).json({ 'success': false, 'message': `Resource not provided` })
     }
 });
 
