@@ -9,9 +9,10 @@
     align-self: center;
     box-shadow: $shadow-alt;
     background-color: #1b1b1b;
-    border-radius: 10px;
+    border-radius: 10px 10px 0 0;
     padding: 8px;
     overflow: hidden;
+    position: relative;
 
     @include tablet {
         width: 80%;
@@ -53,7 +54,7 @@
     &__container {
         @include flex-column;
         padding: 8px;
-        border-radius: 10px;
+        border-radius: 10px 10px 0 0;
         background-color: #515151;
     }
     &__header {
@@ -78,11 +79,56 @@
     }
     &__cell {
         flex-basis: 170px;
+        flex-grow: 1;
         margin: 8px;
         text-shadow: 1px 1px #1b1b1b;
         &:first-child,
         &:last-child {
             flex-basis: 80px;
         }
+        &:last-child {
+            position: relative;
+            @include flex-center;
+            justify-content: flex-end;
+        }
+    }
+    &__link {
+        text-decoration: none;
+        transition: $transition;
+        &:hover {
+            text-decoration: underline;
+            color: $primary-lt;
+            text-shadow: $secondary-dk;
+        }
+    }
+    &__menu {
+        &-icon {
+            height: 16px;
+            width: 16px;
+            cursor: pointer;
+            background: url('../../assets/menu-icon.svg');
+            background-size: cover;
+            filter: invert(1);
+        }
+    }
+    &__overlay {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        border-radius: 0 0 10px 10px;
+        cursor: pointer;
+    }
+    &__notification {
+        padding: 16px;
+        width: 100%;
+        background-color: #b71c8bb5;
+        border-radius: 0 0 10px 10px;
+        border: 2px solid $secondary;
+        text-align: center;
+        cursor: pointer;
+        margin: 8px;
     }
 }

@@ -1,0 +1,37 @@
+@import "../../partials/mixins", "../../partials/variables";
+
+.tone {
+    width: 100%;
+    &-analyzer {
+        width: 100%;
+        @include flex-column;
+        align-items: center;
+        position: relative;
+        &__text {
+            margin: 0px;
+            height: 180px;
+            background-color: $primary;
+            font-family: monospace;
+            box-shadow: $shadow;
+            width: 100%;
+            padding: 16px;
+            resize: none;
+            margin-bottom: 32px;
+            &:disabled {
+                color: $primary-lt;
+            }
+        }
+        & .gallery__status {
+            border-radius: 0;
+        }
+    }
+}
+
+.inkblot-container__img {
+    max-width: 460px;
+    min-width: 288px;
+    border-radius: 10px;
+    background-color: $primary;
+    padding: 8px;
+    box-shadow: $shadow;
+}
