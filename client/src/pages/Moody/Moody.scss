@@ -1,39 +1,89 @@
 @import "../../partials/mixins", "../../partials/variables";
+.moody {
+    & .content__heading {
+        justify-content: unset !important;
+    }
+    &-menu {
+        z-index: 1;
+        border-radius: 10px;
+        display: flex;
+        list-style: none;
+        border-radius: 5px;
+        overflow: hidden;
+        align-self: center;
+        font-weight: 600;
+        background-color: $primary-lt;
+        box-shadow: $shadow;
+        &__link {
+            text-decoration: none;
+            transition: $transition;
+            &.active {
+                background-color: $primary-bg;
+            }
+        }
+        &__item {
+            padding: 8px;
+            transition: $transition;
+            &:hover {
+                background-color: $primary-bg-tpt;
+            }
+        }
+    }
+}
+.camera-container, .inkblot-container {
+    display: flex;
+    justify-content: center;
+    & .animated {
+        position: absolute;
+        z-index: 1;
+        display: flex;
+        justify-content: center;
+    }
+    &__error {
+        cursor: default;
+        background-color: #b71c8b9c;
+        padding: 8px 16px;
+        border-radius: 0px 0px 10px 10px;
+    }
+    & video {
+        border-radius: 10px;
+        box-shadow: $shadow;
+    }
+}
+// Imported React 5 Camera CSS
 #container-circles {
     position: absolute;
-    left: 50%;
-    bottom: 90px;
-}
-#outer-circle {
-    left: -37px;
+    align-self: flex-end;
     height: 75px;
     width: 75px;
-    background-color: hsla(0, 0%, 100%, 0.4);
+    left: 50%;
+    transform: translateX(-50%);
+}
+#outer-circle {
+    height: 75px;
+    width: 75px;
+    background: url("../../assets/snapshot.svg") center no-repeat;
+    cursor: pointer;
+    opacity: 0.5;
+    border: 2px solid $secondary;
+    background-size: cover;
     z-index: 1;
+    transition: $transition;
+    &:hover {
+        opacity: 1;
+    }
 }
 #inner-circle,
 #outer-circle {
     position: absolute;
     border-radius: 50%;
 }
-#inner-circle {
-    left: 50%;
-    top: 38px;
-    height: 44px;
-    width: 44px;
-    background: #fff;
-    margin: -22px 0 0 -22px;
-    z-index: 2;
-}
-#inner-circle.is-clicked {
-    height: 38px;
-    width: 38px;
-    margin: -19px 0 0 -19px;
-}
 #white-flash.normal {
-    position: absolute;
-    height: 100%;
-    width: 100%;
+position: absolute;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
     opacity: 1;
     -webkit-transition: opacity 0.9s ease-out;
     -o-transition: opacity 0.9s ease-out;
@@ -48,7 +98,7 @@
     background-color: #fff;
 }
 .react-html5-camera-photo {
-    position: relative;
+    display: flex;
     text-align: center;
 }
 .react-html5-camera-photo > img,

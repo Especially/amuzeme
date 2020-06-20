@@ -74,7 +74,7 @@ router.get('/callback', function (req, res) {
         grant_type: 'authorization_code'
       },
       headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+        'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64'))
       },
       json: true
     };
@@ -107,7 +107,7 @@ router.get('/refresh_token', function (req, res) {
   var refresh_token = req.query.refresh_token;
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    headers: { 'Authorization': 'Basic ' + (Buffer.from(client_id + ':' + client_secret).toString('base64')) },
     form: {
       grant_type: 'refresh_token',
       refresh_token: refresh_token
@@ -163,7 +163,7 @@ router.get('/recent/:access_token', (req, res) => {
 
 router.get('/playlist/:mood', (req, res) => {
   const access_token = req.headers.access_token;
-  const mood = req.params.mood;
+  const mood = req.params.mood.toLowerCase();
   const artists = JSON.parse(req.headers.artists);
   let artistsSeed = (artists) ? {'seed_artists': artists.join(',')} : null;
   let parameters, moodParams, moodSeed;
@@ -204,12 +204,14 @@ router.get('/playlist/:mood', (req, res) => {
   }
   // Need more seed info to prevent lack of results due to user's low listening history
   if (artists.length < 5 && artists.length > 0) {
+    // Mix both seed genres AND seed artists
     const end = 5 - artists.length;
     let slicedGenres = moodSeed.seed_genres.split(',').slice(0,end).join(',');
     artistsSeed = {'seed_genres': slicedGenres, ...artistsSeed};
   }
+
   parameters = (artists.length > 0) ? {...artistsSeed, ...moodParams} : {...moodSeed, ...moodParams};
-  console.log(parameters);
+
   axios
     .get(`${API_URL}/recommendations`, {
       params: parameters,
@@ -220,10 +222,86 @@ router.get('/playlist/:mood', (req, res) => {
       res.status(200).json(result.data);
     })
     .catch(err => {
-      console.log(err.data);
-      res.status(400).json({ success: false, "message": `There was an error retreiving User Data: ${err}` })
+      res.status(400).json({ success: false, "message": `There was an error retreiving the playlist`, 'response_message': err.response })
     })
 
 });
 
+// Generate new playlist
+router.post('/playlist/generate', (req, res) => { 
+  const userID = req.body.user_id;
+  const data = req.body.data;
+  const access_token = req.body.access;
+  
+  axios
+  .post(`${API_URL}/users/${userID}/playlists`, data, {
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true
+  })
+  .then(result => {
+    res.status(201).json(result.data.id);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(400).json({ success: false, "message": `There was an error generating a playlist: ${err}` })
+  })
+});
+
+// Add songs to playlist
+router.post('/playlist/add', (req, res) => { 
+  const pID = req.body.playlist_id;
+  const data = {"uris": req.body.data};
+  const access_token = req.body.access;
+  
+  axios
+  .post(`${API_URL}/playlists/${pID}/tracks`, data, {
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true
+  })
+  .then(result => {
+    res.status(201).json(result.data);
+  })
+  .catch(err => {
+    console.log(err);
+    res.status(400).json({ success: false, "message": `There was an error adding songs to your playlist: ${err}` })
+  })
+});
+
+// Delete entire playlist
+router.delete('/playlist/:id', (req, res) => { 
+  const pID = req.params.id;
+  const access_token = req.headers.access;
+  
+  axios
+  .delete(`${API_URL}/playlists/${pID}/followers`, {
+    headers: { 'Authorization': 'Bearer ' + access_token },
+    json: true
+  })
+  .then(() => {
+    res.status(200).json({success: true});
+  })
+  .catch(err => {
+    res.status(400).json({ success: false, "message": `There was an error deleting this playlist ${err.response}` })
+  })
+});
+
+// Remove song from playlist
+router.delete('/playlist/track/:id', (req, res) => { 
+  const sID = { "tracks": [{ "uri": `spotify:track:${req.params.id}` }]};
+  const access_token = req.headers.access;
+  const pID = req.headers.playlist;
+  console.log(sID);
+  axios
+  .delete(`${API_URL}/playlists/${pID}/tracks`, {
+    headers: { 'Authorization': 'Bearer ' + access_token},
+    data: sID,
+    json: true
+  })
+  .then(() => {
+    res.status(200).json({success: true});
+  })
+  .catch(err => {
+    res.status(400).json({ success: false, "message": `There was an error deleting this playlist ${err.response}` })
+  })
+});
 module.exports = router;
