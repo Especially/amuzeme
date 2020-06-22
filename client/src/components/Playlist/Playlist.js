@@ -21,7 +21,6 @@ function Playlist({ type, userID, playlist, emotion, spotify_uID, access_token }
     const addToDB = (playlistID, typeID) => {
         console.log(typeID);
         const data = { userID, playlistID, mood: emotion, type: typeID };
-        console.log(data);
         axios
             .post('/firebase/playlist', data)
             .then(res => {
