@@ -90,26 +90,4 @@ router.delete('/playlist/:id', (req, res) => {
     })
 });
 
-// Returns all users matching this desc
-// usersRef.orderByChild('spotify_id').equalTo(userID).on('child_added', (snapshot) => {
-// usersRef.off();
-//     console.log(snapshot);
-//     res.send(snapshot);
-// })
-// .then(result => {
-//     console.log('success', result.key);
-//     res.status(201).json(result.key)
-// })
-// .catch(err => {
-//     console.log(err)
-//     res.status(400).json({ 'success': false, 'error': err })
-// })
-// usersRef.push(data).then(result => {
-//     console.log('success', result.key);
-//     res.status(201).json(result.key)
-// }).catch ( err => {
-//     console.log(err)
-//     res.status(400).json({'success': false, 'error': err})
-// })
-
 module.exports = router;
