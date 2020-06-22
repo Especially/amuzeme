@@ -5,6 +5,7 @@ const PORT = process.env.PORT;
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const logger = require("./middleware/logger");
 
 // Middleware
 // Setting max limit as opposed default 100kb limit to process data URIs
@@ -19,6 +20,10 @@ const toneRoute = require('./routes/external/tone');
 const firebaseRoute = require('./routes/external/firebase');
 
 // External Routes
+
+//  init middleware
+app.use(logger);
+
 //Face AI Route
 app.use('/face-ai', faceAiRoute);
 
