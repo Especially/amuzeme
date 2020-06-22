@@ -48,9 +48,9 @@ router.post('/auth', (req, res) => {
 });
 
 router.post('/playlist', (req, res) => {
-    const { userID, playlistID, mood } = req.body;
+    const { userID, playlistID, mood, type } = req.body;
     const timestamp = new Date().getTime();
-    const data = { userID, playlistID, mood, timestamp };
+    const data = { userID, playlistID, mood, type, timestamp };
     playlistsRef.push(data).then((result) => {
         res.status(201).json({ success: true, id: result.key,  message: 'Successfully added playlist to database' });
     }).catch(err => {
@@ -67,7 +67,8 @@ router.get('/playlist/:userID', (req, res) => {
             snapshot.forEach((childSnapshot) => {
                 // Playlists Exist
                 const playlistData = childSnapshot.val();
-                playlists.push(playlistData);
+                const playlistKey = childSnapshot.key;
+                playlists.push({...playlistData, id: playlistKey});
             })
             res.status(200).json({ success: true, playlists });
         } else {
