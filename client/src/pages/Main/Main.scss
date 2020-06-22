@@ -30,9 +30,14 @@
 .content {
     @include flex-column;
     overflow: hidden;
-    padding-top: 0 !important;
     @include margins;
     width: 100%;
+    &.no-head {
+        padding-top: 48px!important;
+        @include tablet {
+            padding-top: 0!important;
+        }
+    }
     &__title {
         text-align: center;
         margin: 1rem 0;
@@ -47,6 +52,9 @@
             align-items: unset;
             border: none;
         }
+    }
+    &__list {
+        margin-left: 32px;
     }
 
     &__dialogue {

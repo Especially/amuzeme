@@ -12,7 +12,7 @@ import ink6 from '../../assets/inkblots/inkblot6.png';
 import ink7 from '../../assets/inkblots/inkblot7.png';
 import ink8 from '../../assets/inkblots/inkblot8.png';
 
-function Selfies({ userName, analyze }) {
+function TextAnalysis({ userName, analyze }) {
     const [mood, setMood] = useState(null);
     const [user, setUser] = useState(userName);
     const [textData, setTextData] = useState('');
@@ -21,7 +21,8 @@ function Selfies({ userName, analyze }) {
     const [analysisError, setAnalysisError] = useState(false);
     const [analysisMsg, setAnalysisMsg] = useState('');
     const inkblots = [ink1,ink2,ink3,ink4,ink5,ink6,ink7,ink8];
-    const randInkblot = inkblots[Math.floor(Math.random()*inkblots.length)];
+    const randNum = Math.floor(Math.random()*inkblots.length);
+    const [randInkblot] = useState(inkblots[randNum]);
 
     useEffect(() => {
         setUser(userName);
@@ -89,7 +90,7 @@ function Selfies({ userName, analyze }) {
                 <h2 className="content__sub-title text-xl">Analyze the Data</h2>
             </div>
             <div className="content__holder animated slideInRight">
-                <p className="content__text">Your <span className="text-emphasis">mood</span> is going to be determined based off of what you submit in the text field below. Once you hit that analyze button, we then try to match the mood exhibited in your sentence(s) with a playlist made just for you.!</p>
+                <p className="content__text">Your <span className="text-emphasis">mood</span> is going to be determined based off of what you submit in the text field below. Once you hit that analyze button, we then try to match the mood exhibited in your sentence(s) with a playlist made just for you!</p>
             </div>
 
             <section className="gallery animated slideInRight">
@@ -106,4 +107,4 @@ function Selfies({ userName, analyze }) {
     );
 }
 
-export default Selfies;
+export default TextAnalysis;

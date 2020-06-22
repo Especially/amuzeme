@@ -7,27 +7,36 @@ import Selfies from '../../components/Selfies/Selfies';
 import Playlist from '../../components/Playlist/Playlist';
 import TextAnalysis from '../../components/TextAnalysis/TextAnalysis';
 
-function Moody({ loggedIn, userName, access, user_id }) {
+function Moody({ loggedIn, userID, userName, access, spotify_uID }) {
     const [signedIn, setSignedIn] = useState(loggedIn);
     const [artists, setArtists] = useState([]);
     const [mood, setMood] = useState(null);
     const [playlistData, setPlaylistData] = useState(null);
+    const [userHistory, setUserHistory] = useState(null);
 
     useEffect(() => {
         setSignedIn(loggedIn);
         setPlaylistData(playlistData);
         // Obtain user's listening data on component mount
         if (access) {
+            let artists = axios.get(`/spotify/recent/${access}`);
+            let playlists = axios.get(`/firebase/playlist/${userID}`);
             axios
-                .get(`/spotify/recent/${access}`)
-                .then(res => {
-                    uniqueArtists(res.data.items);
-                })
+                .all([artists, playlists])
+                .then(axios.spread((...res) => {
+                    const artistData = res[0].data.items;
+                    const playlistsData = res[1].data;
+                    let playlistSuccess = res[1].data.success;
+                    uniqueArtists(artistData);
+                    if (playlistSuccess) {
+                        setUserHistory(playlistsData.playlists);
+                    }
+                }))
                 .catch(err => {
-                    console.log(err);
+                    console.error(err)
                 })
         }
-    }, [loggedIn, userName, access, playlistData]);
+    }, [loggedIn, userName, access, playlistData, userID]);
 
     function uniqueArtists(arr) {
         // Using Set to obtian all unique artists within array of songs listened to, etc.
@@ -65,7 +74,6 @@ function Moody({ loggedIn, userName, access, user_id }) {
                 const emotions = { 'anger': 'anger', 'fear': 'fear', 'joy': 'happiness', 'sadness': 'sadness', 'analytical': 'contempt', 'confident': 'neutral', 'tentative': 'surprise' };
                 if (totalTones > 1) {
                     data.sort((a, b) => b['score'] - a['score']);
-                    console.log(data);
                 }
                 realEmotion = toTitleCase(data[0].tone_id);
                 emotion = toTitleCase(emotions[data[0].tone_id]);
@@ -79,7 +87,7 @@ function Moody({ loggedIn, userName, access, user_id }) {
                 setPlaylistData(res.data.tracks);
             })
             .catch(err => {
-                console.log(err);
+                console.error(err);
             })
 
     }
@@ -88,7 +96,7 @@ function Moody({ loggedIn, userName, access, user_id }) {
         <>
             {(signedIn) ?
                 <>
-                    <div className="content">
+                    <div className="content no-head">
                         <h1 className="content__title text-xxl">Let's get <span className="text-emphasis text-xxl">Moody</span></h1>
                         <ul className="moody-menu">
                             <NavLink activeClassName='active animated slideInLeft' exact className="moody-menu__link" to='/moody'><li className="moody-menu__item">Selfie</li></NavLink>
@@ -110,6 +118,8 @@ function Moody({ loggedIn, userName, access, user_id }) {
                                     />)
                             }} />
                         </Switch>
+
+                        {/* Persistent component even if the user switches pages app modes. that way they can still manage it if they'd like */}
                         {(mood) &&
                             <>
                                 <div className="content__heading">
@@ -124,7 +134,7 @@ function Moody({ loggedIn, userName, access, user_id }) {
                                             <p className="content__text">We've noticed that your Spotify listening history is a little bare, but don't fret! We still created a <span className="text-emphasis">{(mood.type === 0) ? mood.mood : mood.real}</span> playlist just for you!</p>}
                                     </div>
                                 </div>
-                                <Playlist playlist={playlistData} emotion={(mood.type === 0) ? mood.mood : mood.real} userID={user_id} access_token={access} />
+                                <Playlist history={userHistory} playlist={playlistData} userID={userID} emotion={(mood.type === 0) ? mood.mood : mood.real} spotify_uID={spotify_uID} access_token={access} />
                             </>
                         }
                     </div>
