@@ -6,6 +6,7 @@ import Header from './components/Header/Header';
 import Main from './pages/Main/Main';
 import Moody from './pages/Moody/Moody';
 import Privacy from './pages/Privacy/Privacy';
+import Profile from './pages/Profile/Profile';
 
 function App() {
   const authTokens = JSON.parse(localStorage.getItem('tokens'));
@@ -82,6 +83,7 @@ function App() {
           <Route path="/" exact render={() => <Main userName={userName} loggedIn={loggedIn} />} />
           <Route path="/moody" render={() => <Moody userName={userName} userID={userID} spotify_uID={spotifyUserID} loggedIn={loggedIn} access={accessToken} refresh={refreshToken} />} />
           <Route path="/privacy" component={Privacy} />
+          <Route path="/profile" render={() => <Profile userName={userName} userID={userID} spotify_uID={spotifyUserID} loggedIn={loggedIn} access={accessToken} />} />
           <Route path='/spotify/login' component={() => {
             window.location.href = 'http://localhost:8080/spotify/login';
             return null;

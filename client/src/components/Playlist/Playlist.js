@@ -3,7 +3,7 @@ import './Playlist.scss';
 import axios from 'axios';
 import PlaylistItem from '../PlaylistItem/PlaylistItem';
 
-function Playlist({ userID, playlist, emotion, spotify_uID, access_token }) {
+function Playlist({ type, userID, playlist, emotion, spotify_uID, access_token }) {
     const [musicPlaylist, setMusicPlaylist] = useState(null);
     const [mood, setMood] = useState(emotion);
     const [playlistID, setPlaylistID] = useState(null);
@@ -18,8 +18,10 @@ function Playlist({ userID, playlist, emotion, spotify_uID, access_token }) {
     }, [playlist, emotion])
 
     // Database Management
-    const addToDB = (playlistID) => {
-        const data = { userID, playlistID, mood: emotion };
+    const addToDB = (playlistID, typeID) => {
+        console.log(typeID);
+        const data = { userID, playlistID, mood: emotion, type: typeID };
+        console.log(data);
         axios
             .post('/firebase/playlist', data)
             .then(res => {
@@ -72,7 +74,7 @@ function Playlist({ userID, playlist, emotion, spotify_uID, access_token }) {
                 })
                 .then(res => {
                     const ID = res.data;
-                    addToDB(ID);
+                    addToDB(ID, type);
                     playlistNotifier('We\'ve created your playlist, hang on while we add your songs');
                     setPlaylistID(ID);
                     addSongs(ID, playlistTracks);
