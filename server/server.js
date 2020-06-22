@@ -4,6 +4,7 @@ require('dotenv').config();
 const PORT = process.env.PORT;
 const express = require('express');
 const app = express();
+const path = require("path");
 const cors = require('cors');
 const logger = require("./middleware/logger");
 
@@ -24,6 +25,15 @@ const firebaseRoute = require('./routes/external/firebase');
 //  init middleware
 app.use(logger);
 
+if (process.env.NODE_ENV === "production") {
+    // Set static folder
+    app.use(express.static("../client/build"));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
+    });
+}
+
 //Face AI Route
 app.use('/face-ai', faceAiRoute);
 
@@ -38,6 +48,7 @@ app.use('/tone', toneRoute);
 
 // //Tone Analyzer Route
 app.use('/firebase', firebaseRoute);
+
 
 
 app.listen(PORT, () => {
