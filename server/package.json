@@ -14,14 +14,15 @@
   "dependencies": {
     "@google-cloud/storage": "^5.0.1",
     "axios": "^0.19.2",
+    "concurrently": "^5.2.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "concurrently": "^5.2.0",
     "firebase": "^7.15.3",
     "ibm-watson": "^5.6.0",
     "image-data-uri": "^2.0.1",
+    "path": "^0.12.7",
     "querystring": "^0.2.0",
     "request": "^2.88.2",
     "uuidv4": "^6.1.0"
