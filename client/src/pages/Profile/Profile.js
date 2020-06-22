@@ -21,7 +21,6 @@ const Profile = ({ loggedIn, userID, userName, access, spotify_uID }) => {
                     const historyDataSuccess = historyData.success;
                     if (historyDataSuccess) {
                         setUserHistory(historyData.playlists);
-                        console.log(historyData);
                     } else {
                         console.log('No playlists')
                     }
