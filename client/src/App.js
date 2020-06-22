@@ -5,6 +5,7 @@ import './Global.scss';
 import Header from './components/Header/Header';
 import Main from './pages/Main/Main';
 import Moody from './pages/Moody/Moody';
+import Privacy from './pages/Privacy/Privacy';
 
 function App() {
   const authTokens = JSON.parse(localStorage.getItem('tokens'));
@@ -13,6 +14,7 @@ function App() {
   const [accessToken, setAccessToken] = useState(null);
   const [refreshToken, setRefreshToken] = useState(null);
   const [userName, setUserName] = useState(null);
+  const [spotifyUserID, setSpotifyUserID] = useState(null);
   const [userID, setUserID] = useState(null);
 
   function getHashParams() {
@@ -25,13 +27,16 @@ function App() {
     return hashParams;
   }
 
+
   function getUserData(access) {
     axios
       .get(`/spotify/profile/${access}`)
       .then(res => {
-        let userName = res.data.display_name.split(' ').splice(0, 1).join();
-        let user_id = res.data.id;
-        setUserID(user_id);
+        let userName = res.data.userData.name.split(' ').splice(0, 1).join();
+        let user_id = res.data.userData.spotify_id;
+        let uID = res.data.userKey;
+        setUserID(uID);
+        setSpotifyUserID(user_id);
         setUserName(userName);
       })
       .catch(err => {
@@ -75,7 +80,8 @@ function App() {
         <Header userName={userName} loggedIn={loggedIn} />
         <Switch>
           <Route path="/" exact render={() => <Main userName={userName} loggedIn={loggedIn} />} />
-          <Route path="/moody" render={() => <Moody userName={userName} user_id={userID} loggedIn={loggedIn} access={accessToken} refresh={refreshToken} />} />
+          <Route path="/moody" render={() => <Moody userName={userName} userID={userID} spotify_uID={spotifyUserID} loggedIn={loggedIn} access={accessToken} refresh={refreshToken} />} />
+          <Route path="/privacy" component={Privacy} />
           <Route path='/spotify/login' component={() => {
             window.location.href = 'http://localhost:8080/spotify/login';
             return null;
