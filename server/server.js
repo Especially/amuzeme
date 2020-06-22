@@ -25,15 +25,6 @@ const firebaseRoute = require('./routes/external/firebase');
 //  init middleware
 app.use(logger);
 
-if (process.env.NODE_ENV === "production") {
-    // Set static folder
-    app.use(express.static("../client/build"));
-
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
-    });
-}
-
 //Face AI Route
 app.use('/face-ai', faceAiRoute);
 
@@ -48,6 +39,15 @@ app.use('/tone', toneRoute);
 
 // //Tone Analyzer Route
 app.use('/firebase', firebaseRoute);
+
+if (process.env.NODE_ENV === "production") {
+    // Set static folder
+    app.use(express.static("../client/build"));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
+    });
+}
 
 
 
