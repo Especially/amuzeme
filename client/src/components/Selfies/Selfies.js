@@ -112,7 +112,7 @@ function Selfies({ userName, analyze }) {
 
                 <div className="camera-container">
                     {(cameraError) && <div className="camera-container__error animated bounceIn"><p>{cameraErrorMsg}</p></div>}
-                    <Camera onTakePhoto={(dataUri) => { handleTakePhoto(dataUri); }}><div>Test</div></Camera>
+                    <Camera onTakePhoto={(dataUri) => { handleTakePhoto(dataUri); }} onCameraError={() => {throwCameraError('Oops, looks like your camera is in use, try refreshing!')}}></Camera>
                 </div>
 
             </section>
