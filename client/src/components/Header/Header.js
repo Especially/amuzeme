@@ -22,7 +22,7 @@ function Header({ loggedIn, userName }) {
               <div className='head__logo'></div>
 
               <div className='head__logo-text'><span className="head__logo-text--inner text-s">AmuzeMe</span></div>
-              
+
             </NavLink>
 
           </div>
@@ -37,7 +37,7 @@ function Header({ loggedIn, userName }) {
 
               {(signedIn) ?
 
-                <li className='nav-menu__links text-s'>{user}</li>
+                <NavLink to="/profile" activeClassName="active" className="nav-link"><li className='nav-menu__links text-s'>{user}</li></NavLink>
                 :
                 <NavLink to="/spotify/login" activeClassName="active" className="nav-link"><li className='nav-menu__links text-s'>Sign In</li></NavLink>
               }

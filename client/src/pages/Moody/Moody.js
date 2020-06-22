@@ -13,6 +13,7 @@ function Moody({ loggedIn, userID, userName, access, spotify_uID }) {
     const [mood, setMood] = useState(null);
     const [playlistData, setPlaylistData] = useState(null);
     const [userHistory, setUserHistory] = useState(null);
+    const [type, setType] = useState(null);
 
     useEffect(() => {
         setSignedIn(loggedIn);
@@ -60,6 +61,7 @@ function Moody({ loggedIn, userID, userName, access, spotify_uID }) {
     const analyzeMood = (data, type) => {
         // Obtain all emotional data returned from face AI, sort based off of emotion and return highest emotion exhibited
         let emotion, realEmotion;
+        setType(type);
         if (type === 0) {// Selfies
             if (data.length === 3) {
                 const selfieOne = Object.values(data[0].emotion);
@@ -134,7 +136,7 @@ function Moody({ loggedIn, userID, userName, access, spotify_uID }) {
                                             <p className="content__text">We've noticed that your Spotify listening history is a little bare, but don't fret! We still created a <span className="text-emphasis">{(mood.type === 0) ? mood.mood : mood.real}</span> playlist just for you!</p>}
                                     </div>
                                 </div>
-                                <Playlist history={userHistory} playlist={playlistData} userID={userID} emotion={(mood.type === 0) ? mood.mood : mood.real} spotify_uID={spotify_uID} access_token={access} />
+                                <Playlist type={type} history={userHistory} playlist={playlistData} userID={userID} emotion={(mood.type === 0) ? mood.mood : mood.real} spotify_uID={spotify_uID} access_token={access} />
                             </>
                         }
                     </div>
