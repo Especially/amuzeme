@@ -1,0 +1,13 @@
+@import "../../partials/mixins", "../../partials/variables";
+
+.history .container {
+    &__row {
+        cursor: pointer;
+    }
+    &__cell:first-child {
+        flex-basis: 108px;
+    }
+    &__player {
+        
+    }
+}
