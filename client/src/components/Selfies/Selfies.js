@@ -42,13 +42,14 @@ function Selfies({ userName, analyze }) {
     const purgePhoto = (id) => {
         axios
             .delete(`/cloud/purge/${id}`)
-            .then(res => {
-                console.log('Image Deleted, process complete');
+            .then(() => {
+                // Image deleted
             })
             .catch(err => {
-                console.log(err)
+                console.error(err)
             })
     }
+
     const handleTakePhoto = (dataUri) => {
         // Do stuff with the photo...
         axios
@@ -73,7 +74,6 @@ function Selfies({ userName, analyze }) {
                     if (res.data.length > 1) {
                         removeImg(id);
                         throwCameraError('Oops, try taking a pic with just yourself!');
-                        console.log('We only want your face! Not your friends too! Try taking the pic without them');
                     } else {
                         const analyzeComplete = data.map(item => {
                             return ((item.id === id) ? { 'id': item.id, 'uri': item.uri, 'analyzing': false } :
@@ -83,7 +83,6 @@ function Selfies({ userName, analyze }) {
                         const { emotion } = res.data[0].faceAttributes;
                         const allFaceData = [{ 'id': id, emotion }, ...faceData];
                         setFaceData([...allFaceData]);
-                        console.log(emotion);
                     }
                 } else {
                     throwCameraError('We couldn\'t catch your lovely face. Try using better lighting.');
@@ -96,7 +95,6 @@ function Selfies({ userName, analyze }) {
                 throwCameraError('Whoops, we couldn\'t recognize your face, try again!');
                 removeImg(id);
                 purgePhoto(id);
-                console.log(err);
             })
     }
 
@@ -107,23 +105,30 @@ function Selfies({ userName, analyze }) {
                     <NumberIcon num="1" />
                     <h2 className="content__sub-title text-xl">Take some Selfies</h2>
                 </div>
+
                 <div className="content__holder">
                     <p className="content__text">Hey {user}, let's start by taking some selfies, take <span className="text-emphasis">3</span> selfies that would best describe your current mood.</p>
                 </div>
+
                 <div className="camera-container">
                     {(cameraError) && <div className="camera-container__error animated bounceIn"><p>{cameraErrorMsg}</p></div>}
                     <Camera onTakePhoto={(dataUri) => { handleTakePhoto(dataUri); }}><div>Test</div></Camera>
                 </div>
+
             </section>
+
+
             {(selfieData.length > 0) ?
                 <>
                     <div className="content__heading">
                         <NumberIcon num="2" />
                         <h2 className="content__sub-title text-xl">Analyze the Data</h2>
                     </div>
+
                     <div className="content__holder">
                         <p className="content__text">For each picture that you take, we're obtaining information relatied to your facial response, we then get the average out of all <span className="text-emphasis">3</span> photos to find the greatest mood exhibited and <strong>then</strong> we pair it with <span className="text-grn">music</span> that you like to listen to!</p>
                     </div>
+
                     <section className="gallery">
                         <div className="gallery__holder">
                             {(selfieData.length > 0) ? selfieData.map((item, i) => {
@@ -132,6 +137,7 @@ function Selfies({ userName, analyze }) {
                                 )
                             }) : null}
                         </div>
+                        
                         {(selfieData.length === 3) ? <Button title='Analyze' btnClass='btn-primary' clickHandler={() => { analyze(faceData,0) }} /> : null}
                     </section>
                 </>

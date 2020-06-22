@@ -16,6 +16,7 @@ const faceAiRoute = require('./routes/external/faceAi');
 const cloudRoute = require('./routes/external/cloud');
 const spotifyRoute = require('./routes/external/spotify');
 const toneRoute = require('./routes/external/tone');
+const firebaseRoute = require('./routes/external/firebase');
 
 // External Routes
 //Face AI Route
@@ -30,6 +31,8 @@ app.use('/spotify', spotifyRoute);
 //Tone Analyzer Route
 app.use('/tone', toneRoute);
 
+// //Tone Analyzer Route
+app.use('/firebase', firebaseRoute);
 
 
 app.listen(PORT, () => {

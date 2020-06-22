@@ -29,6 +29,7 @@ var generateRandomString = function (length) {
 
 var stateKey = 'spotify_auth_state';
 
+// Serve static login
 router.use(express.static(__dirname + '/public'))
   .use(cors())
   .use(cookieParser());
@@ -51,9 +52,6 @@ router.get('/login', function (req, res) {
 });
 
 router.get('/callback', function (req, res) {
-
-  // your application requests refresh and access tokens
-  // after checking the state parameter
 
   var code = req.query.code || null;
   var state = req.query.state || null;
@@ -121,7 +119,6 @@ router.get('/refresh_token', function (req, res) {
       res.send({
         'access_token': access_token
       });
-      // Remove else if pain points still exist
     } else {
       res.status(400).json({ success: false, 'message': `Invalid refresh token` })
     }
@@ -136,9 +133,19 @@ router.get('/profile/:access_token', (req, res) => {
       json: true
     })
     .then(result => {
-      res.status(200).json(result.data);
+      const username = result.data.display_name;
+      const email = result.data.email;
+      const id = result.data.id;
+      const data = { username, email, id };
+      axios
+        .post('http://localhost:8080/firebase/auth', data)
+        .then(result => {
+          res.status(200).json(result.data);
+        }).catch(err => {
+          res.status(400).json({ success: false, "message": `There was an error registering and retreiving User Data` })
+        })
     })
-    .catch(err => {
+    .catch(() => {
       res.status(400).json({ success: false, "message": `There was an error retreiving User Data` })
     })
 
@@ -165,52 +172,52 @@ router.get('/playlist/:mood', (req, res) => {
   const access_token = req.headers.access_token;
   const mood = req.params.mood.toLowerCase();
   const artists = JSON.parse(req.headers.artists);
-  let artistsSeed = (artists) ? {'seed_artists': artists.join(',')} : null;
+  let artistsSeed = (artists) ? { 'seed_artists': artists.join(',') } : null;
   let parameters, moodParams, moodSeed;
-  
+
   switch (mood) {
     case 'anger':
-      moodParams = {'max_valence': '0.4', 'min_energy':'0.7', 'target_tempo':'0.8'};
-      moodSeed = {'seed_genres':'metal,electro,hard-rock,heavy-metal,metalcore'};
+      moodParams = { 'max_valence': '0.4', 'min_energy': '0.7', 'target_tempo': '0.8' };
+      moodSeed = { 'seed_genres': 'metal,electro,hard-rock,heavy-metal,metalcore' };
       break;
     case 'contempt':
-      moodParams = {'target_valence': '0.5', 'target_energy':'0.5', 'target_tempo':'0.4', 'target_danceability':'0.5'};
-      moodSeed = {'seed_genres':'classical,folk,sleep,study,ambient'};
+      moodParams = { 'target_valence': '0.5', 'target_energy': '0.5', 'target_tempo': '0.4', 'target_danceability': '0.5' };
+      moodSeed = { 'seed_genres': 'classical,folk,sleep,study,ambient' };
       break;
     case 'disgust':
-      moodParams = {'target_valence': '0.4', 'min_energy':'0.7', 'target_tempo':'0.5', 'target_danceability':'0.5'};
-      moodSeed = {'seed_genres':'grunge,electro,progressive-house,deep-house'};
+      moodParams = { 'target_valence': '0.4', 'min_energy': '0.7', 'target_tempo': '0.5', 'target_danceability': '0.5' };
+      moodSeed = { 'seed_genres': 'grunge,electro,progressive-house,deep-house' };
       break;
     case 'fear':
-      moodParams = {'max_valence': '0.5', 'target_energy':'1.0', 'min_tempo':'0.7', 'target_danceability':'1.0'};
-      moodSeed = {'seed_genres':'punk-rock,metal,trance,deep-house,goth'};
+      moodParams = { 'max_valence': '0.5', 'target_energy': '1.0', 'min_tempo': '0.7', 'target_danceability': '1.0' };
+      moodSeed = { 'seed_genres': 'punk-rock,metal,trance,deep-house,goth' };
       break;
     case 'happiness':
-      moodParams = {'target_valence': '1.0', 'min_energy':'0.7', 'min_tempo':'0.7', 'target_danceability':'1.0'};
-      moodSeed = {'seed_genres':'happy,pop,edm,dance,party'};
+      moodParams = { 'target_valence': '1.0', 'min_energy': '0.7', 'min_tempo': '0.7', 'target_danceability': '1.0' };
+      moodSeed = { 'seed_genres': 'happy,pop,edm,dance,party' };
       break;
     case 'neutral':
-      moodParams = {'max_valence': '0.4', 'target_energy':'0.5', 'target_tempo':'0.5', 'target_danceability':'0.4'};
-      moodSeed = {'seed_genres':'indie,synth-pop,chill,pop,r-n-b'};
+      moodParams = { 'max_valence': '0.4', 'target_energy': '0.5', 'target_tempo': '0.5', 'target_danceability': '0.4' };
+      moodSeed = { 'seed_genres': 'indie,synth-pop,chill,pop,r-n-b' };
       break;
     case 'sadness':
-      moodParams = {'max_valence': '0.3', 'target_energy':'0.5', 'target_tempo':'0.4', 'target_danceability':'0.5'};
-      moodSeed = {'seed_genres':'sad,indie,progressive-house,r-n-b'};
+      moodParams = { 'max_valence': '0.3', 'target_energy': '0.5', 'target_tempo': '0.4', 'target_danceability': '0.5' };
+      moodSeed = { 'seed_genres': 'sad,indie,progressive-house,r-n-b' };
       break;
     case 'surprise':
-      moodParams = {'min_valence': '0.6', 'target_energy':'0.6', 'target_tempo':'0.4', 'target_danceability':'0.6'};
-      moodSeed = {'seed_genres':'pop,k-pop,r-n-b,latino'};
+      moodParams = { 'min_valence': '0.6', 'target_energy': '0.6', 'target_tempo': '0.4', 'target_danceability': '0.6' };
+      moodSeed = { 'seed_genres': 'pop,k-pop,r-n-b,latino' };
       break;
   }
   // Need more seed info to prevent lack of results due to user's low listening history
   if (artists.length < 5 && artists.length > 0) {
     // Mix both seed genres AND seed artists
     const end = 5 - artists.length;
-    let slicedGenres = moodSeed.seed_genres.split(',').slice(0,end).join(',');
-    artistsSeed = {'seed_genres': slicedGenres, ...artistsSeed};
+    let slicedGenres = moodSeed.seed_genres.split(',').slice(0, end).join(',');
+    artistsSeed = { 'seed_genres': slicedGenres, ...artistsSeed };
   }
 
-  parameters = (artists.length > 0) ? {...artistsSeed, ...moodParams} : {...moodSeed, ...moodParams};
+  parameters = (artists.length > 0) ? { ...artistsSeed, ...moodParams } : { ...moodSeed, ...moodParams };
 
   axios
     .get(`${API_URL}/recommendations`, {
@@ -228,80 +235,80 @@ router.get('/playlist/:mood', (req, res) => {
 });
 
 // Generate new playlist
-router.post('/playlist/generate', (req, res) => { 
+router.post('/playlist/generate', (req, res) => {
   const userID = req.body.user_id;
   const data = req.body.data;
   const access_token = req.body.access;
-  
+
   axios
-  .post(`${API_URL}/users/${userID}/playlists`, data, {
-    headers: { 'Authorization': 'Bearer ' + access_token },
-    json: true
-  })
-  .then(result => {
-    res.status(201).json(result.data.id);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(400).json({ success: false, "message": `There was an error generating a playlist: ${err}` })
-  })
+    .post(`${API_URL}/users/${userID}/playlists`, data, {
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+    })
+    .then(result => {
+      res.status(201).json(result.data.id);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(400).json({ success: false, "message": `There was an error generating a playlist: ${err}` })
+    })
 });
 
 // Add songs to playlist
-router.post('/playlist/add', (req, res) => { 
+router.post('/playlist/add', (req, res) => {
   const pID = req.body.playlist_id;
-  const data = {"uris": req.body.data};
+  const data = { "uris": req.body.data };
   const access_token = req.body.access;
-  
+
   axios
-  .post(`${API_URL}/playlists/${pID}/tracks`, data, {
-    headers: { 'Authorization': 'Bearer ' + access_token },
-    json: true
-  })
-  .then(result => {
-    res.status(201).json(result.data);
-  })
-  .catch(err => {
-    console.log(err);
-    res.status(400).json({ success: false, "message": `There was an error adding songs to your playlist: ${err}` })
-  })
+    .post(`${API_URL}/playlists/${pID}/tracks`, data, {
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+    })
+    .then(result => {
+      res.status(201).json(result.data);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(400).json({ success: false, "message": `There was an error adding songs to your playlist: ${err}` })
+    })
 });
 
 // Delete entire playlist
-router.delete('/playlist/:id', (req, res) => { 
+router.delete('/playlist/:id', (req, res) => {
   const pID = req.params.id;
   const access_token = req.headers.access;
-  
+
   axios
-  .delete(`${API_URL}/playlists/${pID}/followers`, {
-    headers: { 'Authorization': 'Bearer ' + access_token },
-    json: true
-  })
-  .then(() => {
-    res.status(200).json({success: true});
-  })
-  .catch(err => {
-    res.status(400).json({ success: false, "message": `There was an error deleting this playlist ${err.response}` })
-  })
+    .delete(`${API_URL}/playlists/${pID}/followers`, {
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      json: true
+    })
+    .then(() => {
+      res.status(200).json({ success: true });
+    })
+    .catch(err => {
+      res.status(400).json({ success: false, "message": `There was an error deleting this playlist ${err.response}` })
+    })
 });
 
 // Remove song from playlist
-router.delete('/playlist/track/:id', (req, res) => { 
-  const sID = { "tracks": [{ "uri": `spotify:track:${req.params.id}` }]};
+router.delete('/playlist/track/:id', (req, res) => {
+  const sID = { "tracks": [{ "uri": `spotify:track:${req.params.id}` }] };
   const access_token = req.headers.access;
   const pID = req.headers.playlist;
   console.log(sID);
   axios
-  .delete(`${API_URL}/playlists/${pID}/tracks`, {
-    headers: { 'Authorization': 'Bearer ' + access_token},
-    data: sID,
-    json: true
-  })
-  .then(() => {
-    res.status(200).json({success: true});
-  })
-  .catch(err => {
-    res.status(400).json({ success: false, "message": `There was an error deleting this playlist ${err.response}` })
-  })
+    .delete(`${API_URL}/playlists/${pID}/tracks`, {
+      headers: { 'Authorization': 'Bearer ' + access_token },
+      data: sID,
+      json: true
+    })
+    .then(() => {
+      res.status(200).json({ success: true });
+    })
+    .catch(err => {
+      res.status(400).json({ success: false, "message": `There was an error deleting this playlist ${err.response}` })
+    })
 });
 module.exports = router;
