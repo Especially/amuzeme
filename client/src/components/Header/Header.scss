@@ -56,7 +56,7 @@
             font-weight: 500;
             @include flex-center;
             transition: $transition;
-            &:hover {
+            &:hover, .active & {
                 background-color: $primary-bg-hov;
             }
         }
