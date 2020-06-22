@@ -9,7 +9,7 @@ const axios = require('axios');
 // Vars
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = 'http://localhost:8080/spotify/callback';
+const redirect_uri = 'https://amuze-me.herokuapp.com/spotify/callback';
 const API_URL = 'https://api.spotify.com/v1';
 
 /**
@@ -84,7 +84,7 @@ router.get('/callback', function (req, res) {
           refresh_token = body.refresh_token;
 
         // Passing the token to the browser to make requests from there
-        res.redirect('http://localhost:3000/#' +
+        res.redirect('https://amuze-me.herokuapp.com/#' +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token
@@ -138,7 +138,7 @@ router.get('/profile/:access_token', (req, res) => {
       const id = result.data.id;
       const data = { username, email, id };
       axios
-        .post('http://localhost:8080/firebase/auth', data)
+        .post('https://amuze-me.herokuapp.com/firebase/auth', data)
         .then(result => {
           res.status(200).json(result.data);
         }).catch(err => {
