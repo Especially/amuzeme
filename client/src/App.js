@@ -85,7 +85,7 @@ function App() {
           <Route path="/privacy" component={Privacy} />
           <Route path="/profile" render={() => <Profile userName={userName} userID={userID} spotify_uID={spotifyUserID} loggedIn={loggedIn} access={accessToken} />} />
           <Route path='/spotify/login' component={() => {
-            window.location.href = 'http://localhost:8080/spotify/login';
+            window.location.href = '/spotify/login';
             return null;
           }} />
         </Switch>
