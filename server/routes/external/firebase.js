@@ -1,15 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const firebase = require('firebase');
+const apiKey = process.env.FIREBASE_API;
+const authDomain = process.env.FIREBASE_AUTH;
+const databaseURL = process.env.FIREBASE_DB;
+const projectId = process.env.FIREBASE_PROJ;
+const storageBucket = process.env.FIREBASE_BUCKET;
+const messagingSenderId = process.env.FIREBASE_SENDER;
+const appId = process.env.FIREBASE_APP_ID;
+const measurementId = process.env.FIREBASE_MEASUREMENT_ID;
 const config = {
-    apiKey: "***REMOVED***",
-    authDomain: "***REMOVED***",
-    databaseURL: "https://***REMOVED***.firebaseio.com",
-    projectId: "***REMOVED***",
-    storageBucket: "***REMOVED***.appspot.com",
-    messagingSenderId: "***REMOVED***",
-    appId: "1:***REMOVED***:web:d1034114f2da5b1524a5e4",
-    measurementId: "***REMOVED***"
+    apiKey,
+    authDomain,
+    databaseURL,
+    projectId,
+    storageBucket,
+    messagingSenderId,
+    appId,
+    measurementId
 };
 firebase.initializeApp(config);
 
