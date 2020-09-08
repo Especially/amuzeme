@@ -5,7 +5,6 @@ const storage = new Storage({ keyFilename: './data/cloudaccesskey.json' });
 const imageDataURI = require('image-data-uri');
 const fs = require('fs');
 const { uuid } = require('uuidv4');
-const axios = require('axios');
 
 // Vars
 const bucketName = 'amuzeme';
