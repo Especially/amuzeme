@@ -31,7 +31,7 @@ function App() {
 
   function getUserData(access) {
     axios
-      .get(`/spotify/profile/${access}`)
+      .get(`/api/spotify/profile/${access}`)
       .then(res => {
         let userName = res.data.userData.name.split(' ').splice(0, 1).join();
         let user_id = res.data.userData.spotify_id;
@@ -48,7 +48,7 @@ function App() {
 
   function verifyToken(refresh) {
     axios
-      .get(`/spotify/refresh_token/?refresh_token=${refresh}`)
+      .get(`/api/spotify/refresh_token/?refresh_token=${refresh}`)
       .then(res => {
         const access_token = res.data.access_token;
         setAccessToken(access_token);
@@ -85,7 +85,7 @@ function App() {
           <Route path="/privacy" component={Privacy} />
           <Route path="/profile" render={() => <Profile userName={userName} userID={userID} spotify_uID={spotifyUserID} loggedIn={loggedIn} access={accessToken} />} />
           <Route path='/spotify/login' component={() => {
-            (process.env.NODE_ENV === 'development') ? window.location.href = 'http://localhost:8080/spotify/login' :  window.location.href = '/spotify/login';
+            (process.env.NODE_ENV === 'development') ? window.location.href = 'http://localhost:8080/api/spotify/login' :  window.location.href = '/api/spotify/login';
             return null;
           }} />
         </Switch>

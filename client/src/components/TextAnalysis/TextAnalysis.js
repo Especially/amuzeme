@@ -52,7 +52,7 @@ function TextAnalysis({ userName, analyze }) {
         setAnalyzing(true);
         const analyzeThis = { 'text': textData };
         axios
-            .post('/tone', analyzeThis)
+            .post('/api/tone', analyzeThis)
             .then(res => {
                 const data = res.data;
                 if (data.length === 0) {

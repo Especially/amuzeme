@@ -20,8 +20,8 @@ function Moody({ loggedIn, userID, userName, access, spotify_uID }) {
         setPlaylistData(playlistData);
         // Obtain user's listening data on component mount
         if (access) {
-            let artists = axios.get(`/spotify/recent/${access}`);
-            let playlists = axios.get(`/firebase/playlist/${userID}`);
+            let artists = axios.get(`/api/spotify/recent/${access}`);
+            let playlists = axios.get(`/api/firebase/playlist/${userID}`);
             axios
                 .all([artists, playlists])
                 .then(axios.spread((...res) => {

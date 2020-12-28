@@ -15,7 +15,7 @@ const Profile = ({ loggedIn, userID, userName, access, spotify_uID }) => {
         // Obtain user's listening data on component mount
         if (access) {
             axios
-                .get(`/firebase/playlist/${userID}`)
+                .get(`/api/firebase/playlist/${userID}`)
                 .then(res => {
                     const historyData = res.data;
                     const historyDataSuccess = historyData.success;
@@ -47,7 +47,7 @@ const Profile = ({ loggedIn, userID, userName, access, spotify_uID }) => {
     // Database Management
     const removeFromDB = (playlistID) => {
         axios
-            .delete(`/firebase/playlist/${playlistID}`)
+            .delete(`/api/firebase/playlist/${playlistID}`)
             .then(res => {
                 // Successfully removed from database
             })
@@ -61,7 +61,7 @@ const Profile = ({ loggedIn, userID, userName, access, spotify_uID }) => {
         const updatedList = userHistory.filter(item => item.id !== id);
         setUserHistory(updatedList);
         axios
-            .delete(`/spotify/playlist/${pID}`, {
+            .delete(`/api/spotify/playlist/${pID}`, {
                 headers: { access: access }
             })
             .then(() => {

@@ -21,7 +21,7 @@ function Playlist({ type, userID, playlist, emotion, spotify_uID, access_token }
     const addToDB = (playlistID, typeID) => {
         const data = { userID, playlistID, mood: emotion, type: typeID };
         axios
-            .post('/firebase/playlist', data)
+            .post('/api/firebase/playlist', data)
             .then(res => {
                 setPlaylistDB(res.data.id);
             })
@@ -33,7 +33,7 @@ function Playlist({ type, userID, playlist, emotion, spotify_uID, access_token }
     // Database Management
     const removeFromDB = (playlistID) => {
         axios
-            .delete(`/firebase/playlist/${playlistID}`)
+            .delete(`/api/firebase/playlist/${playlistID}`)
             .then(res => {
                 // Successfully removed from database
             })
@@ -44,7 +44,7 @@ function Playlist({ type, userID, playlist, emotion, spotify_uID, access_token }
 
     // Add tracks to newly created Spotify playlist
     const addSongs = (id, songURIs) => {
-        axios.post('/spotify/playlist/add',
+        axios.post('/api/spotify/playlist/add',
             {
                 access: access_token,
                 data: songURIs,
@@ -64,7 +64,7 @@ function Playlist({ type, userID, playlist, emotion, spotify_uID, access_token }
         if (!isSaved) {
             const playlistData = { 'name': `AmuzeMe ${emotion} Playlist`, 'public': 'false', 'description': `On ${new Date()} you created a playlist based on your ${emotion} mood.` };
             const playlistTracks = musicPlaylist.map(item => `spotify:track:${item.id}`);
-            axios.post('/spotify/playlist/generate',
+            axios.post('/api/spotify/playlist/generate',
                 {
                     access: access_token,
                     data: playlistData,
@@ -83,7 +83,7 @@ function Playlist({ type, userID, playlist, emotion, spotify_uID, access_token }
                 })
         } else {
             axios
-                .delete(`/spotify/playlist/${playlistID}`, {
+                .delete(`/api/spotify/playlist/${playlistID}`, {
                     headers: { access: access_token }
                 })
                 .then(() => {
@@ -104,7 +104,7 @@ function Playlist({ type, userID, playlist, emotion, spotify_uID, access_token }
         setMusicPlaylist(updatedList);
         if (playlistID) {
             axios
-                .delete(`/spotify/playlist/track/${id}`, {
+                .delete(`/api/spotify/playlist/track/${id}`, {
                     headers: { access: access_token, playlist: playlistID }
                 })
                 .then(() => {

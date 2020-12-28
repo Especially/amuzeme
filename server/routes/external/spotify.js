@@ -9,8 +9,8 @@ const axios = require('axios');
 // Vars
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-// PRODUCTION: const redirect_uri = 'https://amuze-me.herokuapp.com/spotify/callback';
-const redirect_uri = 'http://localhost:8080/spotify/callback';
+// PRODUCTION: const redirect_uri = 'https://amuze-me.jevel.io/api/spotify/callback';
+const redirect_uri = 'http://localhost:8080/api/spotify/callback';
 const API_URL = 'https://api.spotify.com/v1';
 
 /**
@@ -141,7 +141,7 @@ router.get('/profile/:access_token', (req, res) => {
       const data = { username, email, id };
       // PRODUCTION: .post('https://amuze-me.herokuapp.com/firebase/auth', data)
       axios
-        .post('http://localhost:3000/firebase/auth', data)
+        .post('http://localhost:3000/api/firebase/auth', data)
         .then(result => {
           res.status(200).json(result.data);
         }).catch(err => {

@@ -41,7 +41,7 @@ function Selfies({ userName, analyze }) {
 
     const purgePhoto = (id) => {
         axios
-            .delete(`/cloud/purge/${id}`)
+            .delete(`/api/cloud/purge/${id}`)
             .then(() => {
                 // Image deleted
             })
@@ -53,7 +53,7 @@ function Selfies({ userName, analyze }) {
     const handleTakePhoto = (dataUri) => {
         // Do stuff with the photo...
         axios
-            .post(`/cloud/generate`, { 'uri': dataUri })
+            .post(`/api/cloud/generate`, { 'uri': dataUri })
             .then(res => {
                 const { image, id } = res.data;
                 const allURIs = [...selfieData, { 'id': id, 'uri': dataUri, 'analyzing': true }];

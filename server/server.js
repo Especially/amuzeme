@@ -26,19 +26,19 @@ const firebaseRoute = require('./routes/external/firebase');
 // app.use(logger);
 
 //Face AI Route
-app.use('/face-ai', faceAiRoute);
+app.use('/api/face-ai', faceAiRoute);
 
 //Cloud Route
-app.use('/cloud', cloudRoute);
+app.use('/api/cloud', cloudRoute);
 
 //Spotify Route
-app.use('/spotify', spotifyRoute);
+app.use('/api/spotify', spotifyRoute);
 
 //Tone Analyzer Route
-app.use('/tone', toneRoute);
+app.use('/api/tone', toneRoute);
 
 // //Tone Analyzer Route
-app.use('/firebase', firebaseRoute);
+app.use('/api/firebase', firebaseRoute);
 
 if (process.env.NODE_ENV === "production") {
     // Set static folder
