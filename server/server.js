@@ -3,9 +3,11 @@ require('dotenv').config();
 // Libs
 const PORT = process.env.PORT;
 const express = require('express');
+const https = require('https');
 const app = express();
 const path = require("path");
 const cors = require('cors');
+const creds = {key: process.env.SSL_KEY, cert: process.env.SSL_CERT};
 // const logger = require("./middleware/logger");
 
 // Middleware
@@ -49,8 +51,12 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 
+const httpsServer = https.createServer(creds, app);
 
 
-app.listen(PORT, () => {
+app.listen(3001, () => {
     console.log(`Now listening on port ${PORT}.`)
+})
+httpsServer.listen(PORT, () => {
+    console.log(`Now listening on port ${PORT}`)
 })
