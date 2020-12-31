@@ -68,7 +68,7 @@ function Selfies({ userName, analyze }) {
 
     function analyzePhoto(url, id, data) {
         axios
-            .post(`/face-ai`, { "url": url })
+            .post(`/api/face-ai`, { "url": url })
             .then(res => {
                 if (res.data.length > 0) {
                     if (res.data.length > 1) {
