@@ -2,13 +2,19 @@ require('dotenv').config();
 
 // Libs
 const PORT = process.env.PORT;
-const express = require('express');
+const fs = require('fs');
+const http = require('http');
 const https = require('https');
+const privateKey = fs.readFileSync('../../jevel.io.key');
+const cert = fs.readFileSync('../../jevel.io.crt');
+const express = require('express');
+
 const app = express();
 const path = require("path");
 const cors = require('cors');
-const creds = {key: process.env.SSL_KEY, cert: process.env.SSL_CERT};
 // const logger = require("./middleware/logger");
+
+const credentials = {key: privateKey, cert};
 
 // Middleware
 // Setting max limit as opposed default 100kb limit to process data URIs
@@ -28,35 +34,31 @@ const firebaseRoute = require('./routes/external/firebase');
 // app.use(logger);
 
 //Face AI Route
-app.use('/api/face-ai', faceAiRoute);
+app.use('/face-ai', faceAiRoute);
 
 //Cloud Route
-app.use('/api/cloud', cloudRoute);
+app.use('/cloud', cloudRoute);
 
 //Spotify Route
-app.use('/api/spotify', spotifyRoute);
+app.use('/spotify', spotifyRoute);
 
 //Tone Analyzer Route
-app.use('/api/tone', toneRoute);
+app.use('/tone', toneRoute);
 
 // //Tone Analyzer Route
-app.use('/api/firebase', firebaseRoute);
+app.use('/firebase', firebaseRoute);
 
 if (process.env.NODE_ENV === "production") {
     // Set static folder
     app.use(express.static("../client/build"));
 
-    app.get("*", (req, res) => {
-        res.sendFile(path.join(__dirname, "../client", "build", "index.html"));
+    app.get("/*", (req, res) => {
+        res.sendFile(path.join(__dirname, "./index.html"));
     });
 }
 
-const httpsServer = https.createServer(creds, app);
 
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log(`Now listening on port ${PORT}.`)
 })
-//httpsServer.listen(PORT, () => {
-//    console.log(`Now listening on port ${PORT}`)
-//})
