@@ -57,6 +57,7 @@ router.get('/callback', function (req, res) {
   var code = req.query.code || null;
   var state = req.query.state || null;
   var storedState = req.cookies ? req.cookies[stateKey] : null;
+  const redirectUri = (process.env.NODE_ENV === 'production') ? 'https://amuze.jevel.io' : 'http://localhost:3000' ;
 
   if (state === null || state !== storedState) {
     res.redirect('/#' +
@@ -85,7 +86,7 @@ router.get('/callback', function (req, res) {
           refresh_token = body.refresh_token;
 
         // Passing the token to the browser to make requests from there
-        res.redirect(`${base_uri}/#` +
+        res.redirect(`${redirectUri}/#` +
           querystring.stringify({
             access_token: access_token,
             refresh_token: refresh_token
@@ -171,12 +172,12 @@ router.get('/recent/:access_token', (req, res) => {
 });
 
 router.get('/playlist/:mood', (req, res) => {
-  const access_token = req.headers.access_token;
+  const accessToken = req.headers.access_token;
   const mood = req.params.mood.toLowerCase();
   const artists = JSON.parse(req.headers.artists);
   let artistsSeed = (artists) ? { 'seed_artists': artists.join(',') } : null;
   let parameters, moodParams, moodSeed;
-
+  
   switch (mood) {
     case 'anger':
       moodParams = { 'max_valence': '0.4', 'min_energy': '0.7', 'target_tempo': '0.8' };
@@ -224,7 +225,7 @@ router.get('/playlist/:mood', (req, res) => {
   axios
     .get(`${API_URL}/recommendations`, {
       params: parameters,
-      headers: { 'Authorization': 'Bearer ' + access_token },
+      headers: { 'Authorization': 'Bearer ' + accessToken },
       json: true
     })
     .then(result => {
@@ -240,11 +241,11 @@ router.get('/playlist/:mood', (req, res) => {
 router.post('/playlist/generate', (req, res) => {
   const userID = req.body.user_id;
   const data = req.body.data;
-  const access_token = req.body.access;
+  const accessToken = req.body.access;
 
   axios
     .post(`${API_URL}/users/${userID}/playlists`, data, {
-      headers: { 'Authorization': 'Bearer ' + access_token },
+      headers: { 'Authorization': 'Bearer ' + accessToken },
       json: true
     })
     .then(result => {
@@ -260,11 +261,11 @@ router.post('/playlist/generate', (req, res) => {
 router.post('/playlist/add', (req, res) => {
   const pID = req.body.playlist_id;
   const data = { "uris": req.body.data };
-  const access_token = req.body.access;
+  const accessToken = req.body.access;
 
   axios
     .post(`${API_URL}/playlists/${pID}/tracks`, data, {
-      headers: { 'Authorization': 'Bearer ' + access_token },
+      headers: { 'Authorization': 'Bearer ' + accessToken },
       json: true
     })
     .then(result => {
@@ -279,11 +280,11 @@ router.post('/playlist/add', (req, res) => {
 // Delete entire playlist
 router.delete('/playlist/:id', (req, res) => {
   const pID = req.params.id;
-  const access_token = req.headers.access;
+  const accessToken = req.headers.access;
 
   axios
     .delete(`${API_URL}/playlists/${pID}/followers`, {
-      headers: { 'Authorization': 'Bearer ' + access_token },
+      headers: { 'Authorization': 'Bearer ' + accessToken },
       json: true
     })
     .then(() => {
@@ -297,12 +298,12 @@ router.delete('/playlist/:id', (req, res) => {
 // Remove song from playlist
 router.delete('/playlist/track/:id', (req, res) => {
   const sID = { "tracks": [{ "uri": `spotify:track:${req.params.id}` }] };
-  const access_token = req.headers.access;
+  const accessToken = req.headers.access;
   const pID = req.headers.playlist;
   console.log(sID);
   axios
     .delete(`${API_URL}/playlists/${pID}/tracks`, {
-      headers: { 'Authorization': 'Bearer ' + access_token },
+      headers: { 'Authorization': 'Bearer ' + accessToken },
       data: sID,
       json: true
     })
