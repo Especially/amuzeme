@@ -1,13 +1,11 @@
 require('dotenv').config();
 
 // Libs
-const PORT = process.env.PORT;
+const PORT = (process.env.NODE_ENV === 'production') ? process.env.PORT || 3001 : 8080;
 const express = require('express');
-const https = require('https');
 const app = express();
 const path = require("path");
 const cors = require('cors');
-const creds = {key: process.env.SSL_KEY, cert: process.env.SSL_CERT};
 // const logger = require("./middleware/logger");
 
 // Middleware
@@ -24,7 +22,7 @@ const firebaseRoute = require('./routes/external/firebase');
 
 // External Routes
 
-// //  init middleware
+//  init middleware
 // app.use(logger);
 
 //Face AI Route
@@ -51,12 +49,7 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 
-const httpsServer = https.createServer(creds, app);
 
-
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log(`Now listening on port ${PORT}.`)
 })
-//httpsServer.listen(PORT, () => {
-//    console.log(`Now listening on port ${PORT}`)
-//})
