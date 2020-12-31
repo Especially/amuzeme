@@ -81,7 +81,7 @@ function Moody({ loggedIn, userID, userName, access, spotify_uID }) {
                 emotion = toTitleCase(emotions[data[0].tone_id]);
             }
         axios
-            .get(`/spotify/playlist/${emotion.toLowerCase()}`, {
+            .get(`/api/spotify/playlist/${emotion.toLowerCase()}`, {
                 headers: { 'access_token': access, 'artists': JSON.stringify(artists) }
             })
             .then(res => {
