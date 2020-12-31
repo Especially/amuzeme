@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const API_URL = process.env.TONE_API;
 const API_KEY = process.env.TONE_KEY;
-const axios = require('axios');
 const ToneAnalyzerV3 = require('ibm-watson/tone-analyzer/v3');
 const { IamAuthenticator } = require('ibm-watson/auth');
 
