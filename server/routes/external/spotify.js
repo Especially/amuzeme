@@ -9,7 +9,7 @@ const axios = require('axios');
 // Vars
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
-const redirect_uri = (process.env.NODE_ENV === 'production') ? 'https://amuze-me.jevel.io/api/spotify/callback' : 'http://localhost:8080/api/spotify/callback' ;  
+const redirect_uri = (process.env.NODE_ENV === 'production') ? 'https://amuze.jevel.io/api/spotify/callback' : 'http://localhost:8080/api/spotify/callback' ;  
 const API_URL = 'https://api.spotify.com/v1';
 
 /**
